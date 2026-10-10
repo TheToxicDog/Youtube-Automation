@@ -1,0 +1,5 @@
+You don't need to install Photoshop. Seven open-source creative apps run in this one browser tab.
+Everyone says pro creative tools need a download. These seven run in your browser tab, free.
+What if your whole creative suite was one browser tab, and your files never left your machine?
+Stop paying for seven apps. Here are seven open-source ones, built in Rust, running in one tab.
+I put seven open-source creative apps in one browser tab. No install, no account, no upload.

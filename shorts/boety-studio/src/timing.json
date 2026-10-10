@@ -1,0 +1,67 @@
+[
+ {
+  "id": "hook",
+  "text": "Why do you still install Photoshop, when seven open-source apps run in one browser tab, and your files never leave your machine?",
+  "dur": 6.374
+ },
+ {
+  "id": "intro",
+  "text": "This is boety studio. Seven creative apps, one tab.",
+  "dur": 3.482
+ },
+ {
+  "id": "photocraft",
+  "text": "PhotoCraft, for images.",
+  "dur": 1.66
+ },
+ {
+  "id": "vectorcraft",
+  "text": "VectorCraft, for vector art.",
+  "dur": 1.567
+ },
+ {
+  "id": "filmcraft",
+  "text": "FilmCraft, for video.",
+  "dur": 1.358
+ },
+ {
+  "id": "lightcraft",
+  "text": "LightCraft, for raw photos.",
+  "dur": 1.718
+ },
+ {
+  "id": "pdfcraft",
+  "text": "PdfCraft, for PDF files.",
+  "dur": 1.44
+ },
+ {
+  "id": "effectcraft",
+  "text": "EffectCraft, for motion graphics.",
+  "dur": 2.183
+ },
+ {
+  "id": "designcraft",
+  "text": "And DesignCraft, for page layout.",
+  "dur": 2.125
+ },
+ {
+  "id": "rust",
+  "text": "Every one is open source, written from scratch in Rust, and running right here in the browser.",
+  "dur": 4.47
+ },
+ {
+  "id": "honest",
+  "text": "They're early builds from the ArtCraft team, so expect rough edges.",
+  "dur": 3.68
+ },
+ {
+  "id": "cta",
+  "text": "Link's in the description. Seven apps. Zero installs.",
+  "dur": 3.632
+ },
+ {
+  "id": "loop",
+  "text": "So why are you still installing them?",
+  "dur": 1.811
+ }
+]

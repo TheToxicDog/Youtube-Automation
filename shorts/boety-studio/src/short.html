@@ -1,0 +1,260 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--panel:#121316;--line:rgb(255 255 255/.12);--fg:#f2f1ee;--muted:rgb(242 241 238/.62);--faint:rgb(242 241 238/.38);--accent:#6f9cff;
+--display:"Archivo","Helvetica Neue",Arial,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--fg);font-family:var(--body);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;
+  background:repeating-linear-gradient(to right,transparent 0 89px,rgb(255 255 255/.035) 89px 90px),
+             repeating-linear-gradient(to bottom,transparent 0 89px,rgb(255 255 255/.035) 89px 90px),var(--bg)}
+#glow{position:absolute;width:1400px;height:1400px;left:-160px;top:120px;border-radius:50%;filter:blur(40px);opacity:.28;
+  background:radial-gradient(circle,var(--c,#2f7bf5) 0%,transparent 62%)}
+.scene{position:absolute;inset:0;opacity:0}
+.mono{font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.display{font-family:var(--display);font-weight:800;letter-spacing:-.035em;font-stretch:118%;line-height:1}
+em{font-style:normal;color:var(--accent)}
+
+/* progress + header */
+#bar{position:absolute;left:0;top:0;height:10px;background:var(--accent);z-index:50}
+#head{position:absolute;left:60px;right:60px;top:70px;display:flex;justify-content:space-between;align-items:center;z-index:40;color:var(--faint);font-size:26px}
+#head .brand{display:flex;gap:16px;align-items:center;color:var(--fg);font:700 34px var(--display);font-stretch:110%;letter-spacing:-.01em;text-transform:none}
+
+/* hook: browser window */
+.win{position:absolute;left:70px;top:330px;width:940px;height:860px;border-radius:26px;background:var(--panel);border:2px solid var(--line);overflow:hidden;box-shadow:0 40px 90px rgb(0 0 0/.6)}
+.win .tabs{height:74px;display:flex;align-items:flex-end;gap:10px;padding:0 22px;background:#0e0f11;border-bottom:2px solid var(--line)}
+.win .dots{display:flex;gap:10px;align-self:center;margin-right:14px}.win .dots i{width:16px;height:16px;border-radius:50%;background:rgb(255 255 255/.18)}
+.win .tab{height:54px;padding:0 24px;display:flex;align-items:center;gap:12px;background:var(--panel);border:2px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0;font:600 24px var(--body)}
+.win .tab.ghost{background:none;border-color:transparent;color:var(--faint)}
+.win .mosaic{position:absolute;left:0;right:0;top:76px;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px}
+.win .mosaic img{width:100%;border-radius:10px;display:block;aspect-ratio:16/10;object-fit:cover;object-position:top left}
+.big-top{position:absolute;left:60px;right:60px;top:160px;font-size:128px;text-align:left}
+.stamp{position:absolute;right:70px;top:1110px;transform:rotate(-6deg);background:#f2f1ee;color:#0b0b0c;padding:18px 30px;font:800 64px var(--display);font-stretch:118%;letter-spacing:-.02em;box-shadow:0 20px 40px rgb(0 0 0/.5)}
+
+/* intro */
+.intro-mark{position:absolute;left:0;right:0;top:250px;display:flex;flex-direction:column;align-items:center;gap:40px}
+.intro-mark .word{font:800 150px var(--display);font-stretch:118%;letter-spacing:-.04em}
+.intro-mark .sub{font-size:84px;text-align:center}
+.dock{position:absolute;left:60px;right:60px;top:740px;display:grid;grid-template-columns:repeat(4,1fr);gap:34px 20px;justify-items:center}
+.dock div{display:grid;justify-items:center;gap:12px;font:600 26px var(--body);color:var(--muted)}
+.dock img{width:140px;height:140px;border-radius:36px;box-shadow:0 18px 36px rgb(0 0 0/.45)}
+
+/* app card */
+.app .top{position:absolute;left:60px;right:60px;top:200px;display:flex;justify-content:space-between;align-items:center;font-size:30px;color:var(--faint)}
+.app .num{color:#0b0b0c;padding:6px 14px;font-weight:600}
+.app .shot{position:absolute;left:60px;width:960px;top:280px;height:600px;border-radius:22px;overflow:hidden;border:2px solid var(--line);box-shadow:0 40px 90px rgb(0 0 0/.6);background:#1b1c20}
+.app .shot img{width:100%;height:100%;object-fit:cover;object-position:top left;transform-origin:30% 30%}
+.app .icon{position:absolute;left:96px;top:810px;width:150px;height:150px;border-radius:34px;box-shadow:0 18px 40px rgb(0 0 0/.55)}
+.app .name{position:absolute;left:60px;right:60px;top:1000px;font-size:132px}
+.app .cat{position:absolute;left:64px;top:1150px;font-size:30px;color:var(--muted)}
+
+/* facts */
+.facts{position:absolute;left:60px;right:60px;top:300px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.fact{border:2px solid var(--line);background:var(--panel);padding:40px 34px;height:330px;display:flex;flex-direction:column;justify-content:space-between}
+.fact i{width:76px;height:76px;display:grid;place-items:center;border:2px solid rgb(255 255 255/.22);color:var(--accent)}
+.fact b{font:800 58px/1.02 var(--display);font-stretch:112%;letter-spacing:-.03em}
+.lic{position:absolute;left:60px;right:60px;top:1020px;display:flex;justify-content:center;color:var(--faint);font-size:28px}
+
+/* honest + cta */
+.center-big{position:absolute;left:60px;right:60px;top:380px;text-align:center}
+.tagline{display:inline-block;border:2px solid rgb(255 255 255/.3);padding:10px 18px;font-size:30px;color:var(--muted)}
+.cta-arrow{position:absolute;left:50%;top:880px;transform:translateX(-50%)}
+
+/* captions */
+#cap{position:absolute;left:70px;right:150px;top:1270px;z-index:45;text-align:left;font:800 72px/1.12 var(--display);font-stretch:108%;letter-spacing:-.02em}
+#cap span{color:rgb(242 241 238/.32);transition:none}
+#cap span.on{color:#fff}
+#cap span.now{color:var(--c,#6f9cff)}
+#cap .pill{display:inline;background:rgb(11 11 12/.72);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:4px 14px;border-radius:12px}
+</style></head>
+<body><div id="stage">
+<div id="glow"></div>
+<div id="bar"></div>
+<div id="head" class="mono">
+  <div class="brand"><svg width="40" height="40" viewBox="0 0 28 28"><rect x="1.5" y="1.5" width="25" height="25" fill="none" stroke="#f2f1ee" stroke-opacity=".4"/><rect x="6" y="6" width="9" height="9" fill="#2f7bf5"/><path d="M17 13v9h-9" fill="none" stroke="#f2f1ee" stroke-width="1.6"/></svg>boety studio</div>
+  <span id="headr">7 apps · 1 tab</span>
+</div>
+
+<section class="scene" id="s-hook">
+  <div class="big-top display" id="hook-title">NO&nbsp;<em>INSTALL.</em></div>
+  <div class="win" id="win">
+    <div class="tabs"><div class="dots"><i></i><i></i><i></i></div>
+      <div class="tab"><svg width="24" height="24" viewBox="0 0 28 28"><rect x="6" y="6" width="9" height="9" fill="#2f7bf5"/><path d="M17 13v9h-9" fill="none" stroke="#f2f1ee" stroke-width="2"/></svg>boety studio</div>
+      <div class="tab ghost">+</div></div>
+    <div class="mosaic" id="mosaic"></div>
+  </div>
+  <div class="stamp" id="stamp">1 TAB</div>
+</section>
+
+<section class="scene" id="s-intro">
+  <div class="intro-mark">
+    <div class="word" id="intro-word">boety studio</div>
+    <div class="sub display">Seven apps.<br>One <em>tab</em>.</div>
+  </div>
+  <div class="dock" id="dock"></div>
+</section>
+
+<section class="scene app" id="s-app">
+  <div class="top mono"><span><span class="num" id="app-num">01</span>&nbsp;&nbsp;/ 07</span><span id="app-status"></span></div>
+  <div class="shot"><img id="app-shot"></div>
+  <img class="icon" id="app-icon">
+  <div class="name display" id="app-name"></div>
+  <div class="cat mono" id="app-cat"></div>
+</section>
+
+<section class="scene" id="s-rust">
+  <div class="facts" id="facts"></div>
+  <div class="lic mono">MIT or Apache-2.0 · WebAssembly</div>
+</section>
+
+<section class="scene" id="s-honest">
+  <div class="center-big">
+    <div class="tagline mono">Early builds · in development</div>
+    <div class="display" style="font-size:120px;margin-top:50px">Expect<br><em>rough edges.</em></div>
+    <div class="mono" style="margin-top:56px;font-size:30px;color:var(--muted)">Apps by the ArtCraft team<br><br>hosted in one tab by boety studio</div>
+  </div>
+</section>
+
+<section class="scene" id="s-cta">
+  <div class="center-big">
+    <div class="tagline mono">Link in description</div>
+    <div class="display" style="font-size:150px;margin-top:50px">7 apps.<br><em>0 installs.</em></div>
+  </div>
+  <svg class="cta-arrow" id="cta-arrow" width="140" height="200" viewBox="0 0 24 34" fill="none" stroke="#f2f1ee" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v28M3 21l9 9 9-9"/></svg>
+</section>
+
+<section class="scene" id="s-loop">
+  <div class="center-big" style="top:420px">
+    <div class="display" style="font-size:132px;line-height:1.02">So why are you <em>still installing</em> them?</div>
+  </div>
+</section>
+
+<div id="cap"></div>
+</div>
+
+<script>
+const APPS=[
+ {id:"photocraft",n:["Photo","Craft"],c:"#2f7bf5",cat:"Image editor",st:"Early alpha"},
+ {id:"vectorcraft",n:["Vector","Craft"],c:"#e8573f",cat:"Vector illustration",st:"In development"},
+ {id:"filmcraft",n:["Film","Craft"],c:"#8b5cf6",cat:"Video editor",st:"In development"},
+ {id:"lightcraft",n:["Light","Craft"],c:"#f2a516",cat:"Photo library & raw developer",st:"In development"},
+ {id:"pdfcraft",n:["Pdf","Craft"],c:"#12a58a",cat:"PDF workbench",st:"Early alpha"},
+ {id:"effectcraft",n:["Effect","Craft"],c:"#e0368f",cat:"Motion graphics & VFX",st:"In development"},
+ {id:"designcraft",n:["Design","Craft"],c:"#7bb51c",cat:"Page layout & publishing",st:"In development"},
+];
+const IMG="img/";
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>1-Math.pow(1-clamp(x),3);
+const easeBack=x=>{x=clamp(x);const c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+// built by seek-setup: TL = [{id,text,start,dur}], TOTAL
+let TL=[],TOTAL=0,BYID={};
+window.setup=function(timing,opts){
+  let t=opts.lead;
+  for(const l of timing){
+    const isApp=APPS.some(a=>a.id===l.id);
+    TL.push({...l,start:t}); BYID[l.id]=TL[TL.length-1];
+    t+=l.dur+(isApp?opts.appGap:opts.gap);
+  }
+  TOTAL=t-opts.gap+opts.tail;
+  // build static DOM
+  $("mosaic").innerHTML=[...APPS,APPS[0]].map(a=>`<img src="${IMG}${a.id}-shot.webp">`).join("");
+  $("dock").innerHTML=APPS.map(a=>`<div><img src="${IMG}${a.id}-icon.webp">${a.n.join("")}</div>`).join("");
+  const icons={
+   open:'<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+   rust:'<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/>',
+   web:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/>',
+   local:'<path d="M22 12H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M6 16h.01M10 16h.01"/>'};
+  const F=[["open","Open<br>source"],["rust","Written<br>in <em>Rust</em>"],["web","Runs in<br>your browser"],["local","Files stay<br>local"]];
+  $("facts").innerHTML=F.map(([k,t])=>`<div class="fact"><i><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icons[k]}</svg></i><b>${t}</b></div>`).join("");
+  return {total:TOTAL,tl:TL};
+};
+
+function words(text){ // word list with relative start/end weights
+  const w=text.split(/\s+/); const wt=w.map(x=>x.replace(/[^\w']/g,"").length+2+(/[,.?!]$/.test(x)?3:0));
+  const sum=wt.reduce((a,b)=>a+b,0); let acc=0;
+  return w.map((x,i)=>{const s=acc/sum; acc+=wt[i]; return {w:x,s,e:acc/sum}});
+}
+let capKey="";
+function captions(t){
+  // active line = last line whose start <= t, while within dur+gap
+  let cur=null; for(const l of TL){ if(t>=l.start-0.05) cur=l; }
+  const cap=$("cap");
+  if(!cur||cur.id==='loop'||t>cur.start+cur.dur+0.35){cap.innerHTML="";capKey="";return;}
+  // chunk long lines into <=7 word groups
+  const ws=words(cur.text); const speak=cur.dur-0.18; const rel=(t-cur.start)/speak;
+  const groups=[]; let g=[];
+  ws.forEach((w,i)=>{g.push(w); if(g.length>=6||/[,.?!]$/.test(w.w)&&g.length>=3||i===ws.length-1){groups.push(g);g=[];}});
+  let gi=groups.findIndex(gr=>rel<gr[gr.length-1].e); if(gi<0) gi=groups.length-1;
+  const gr=groups[gi];
+  cap.innerHTML=`<span class="pill">${gr.map(w=>`<span class="${rel>=w.e?'on':rel>=w.s?'now':''}">${w.w}</span>`).join(" ")}</span>`;
+}
+
+function show(id,o,y=0,s=1){const el=$(id);el.style.opacity=o;el.style.transform=`translateY(${y}px) scale(${s})`;}
+function hideAll(){for(const s of document.querySelectorAll(".scene")){s.style.opacity=0;}}
+function inout(t,a,b,fi=.28,fo=.22){return Math.min(ease((t-a)/fi),ease((b-t)/fo))}
+
+window.seek=function(t){
+  hideAll();
+  $("bar").style.width=(clamp(t/TOTAL)*100)+"%";
+  const L=k=>BYID[k];
+  const endOf=k=>{const i=TL.indexOf(L(k));return i<TL.length-1?TL[i+1].start:TOTAL};
+  let color="#2f7bf5";
+
+  // HOOK
+  {const a=0,b=endOf("hook");
+   if(t<b+0.3){const k=inout(t,a,b,0.01,0.25), p=(t-a)/(b-a);
+    show("s-hook",k);
+    const tt=$("hook-title"); tt.style.transform=`translateY(${lerp(40,0,easeBack(t/0.5))}px) scale(${lerp(1.15,1,ease(t/0.5))})`;
+    $("win").style.transform=`translateY(${lerp(120,0,ease((t-0.15)/0.7))}px) scale(${lerp(1,1.05,p)})`; $("win").style.opacity=clamp((t-0.1)/0.4);
+    $("mosaic").style.transform=`translateY(${-lerp(0,520,p)}px)`;
+    const st=$("stamp"), sp=(t-L("hook").start-3.6)/0.35; st.style.opacity=clamp(sp*2);
+    st.style.transform=`rotate(-6deg) scale(${lerp(1.8,1,easeBack(sp))})`;}}
+  // INTRO
+  {const a=L("intro").start-0.15,b=endOf("intro");
+   if(t>a-0.3&&t<b+0.3){show("s-intro",inout(t,a,b),lerp(60,0,ease((t-a)/.4)));
+    $("dock").querySelectorAll("div").forEach((d,i)=>{const q=(t-a-0.9-i*0.11)/0.35; d.style.opacity=clamp(q*2); d.style.transform=`translateY(${lerp(60,0,ease(q))}px) scale(${lerp(.6,1,easeBack(q))})`;});
+    color="#6f9cff";}}
+  // APPS
+  APPS.forEach((ap,i)=>{const l=L(ap.id); const a=l.start-0.12, b=endOf(ap.id)-0.02;
+    if(t>=a&&t<b){const q=(t-a), p=q/(b-a);
+      const el=$("s-app"); el.style.opacity=1; el.style.transform=`translateX(${lerp(140,0,ease(q/0.28))}px)`; el.style.opacity=clamp(q/0.12);
+      $("app-num").textContent=String(i+1).padStart(2,"0"); $("app-num").style.background=ap.c;
+      $("app-status").textContent=ap.st; $("app-status").style.color=ap.c;
+      const im=$("app-shot"); if(!im.src.endsWith(`${ap.id}-shot.webp`)) im.src=`${IMG}${ap.id}-shot.webp`;
+      im.style.transform=`scale(${lerp(1.0,1.12,p)})`;
+      const ic=$("app-icon"); if(!ic.src.endsWith(`${ap.id}-icon.webp`)) ic.src=`${IMG}${ap.id}-icon.webp`;
+      ic.style.transform=`scale(${lerp(.4,1,easeBack((q-0.08)/0.32))}) rotate(${lerp(-14,0,ease((q-0.08)/0.32))}deg)`;
+      $("app-name").innerHTML=`${ap.n[0]}<span style="color:${ap.c}">${ap.n[1]}</span>`;
+      $("app-name").style.transform=`translateY(${lerp(50,0,ease((q-0.1)/0.3))}px)`; $("app-name").style.opacity=clamp((q-0.1)/0.2);
+      $("app-cat").textContent=ap.cat; $("app-cat").style.opacity=clamp((q-0.2)/0.2);
+      color=ap.c;}});
+  // RUST / facts
+  {const a=L("rust").start-0.12,b=endOf("rust");
+   if(t>a-0.3&&t<b+0.3){show("s-rust",inout(t,a,b));
+    const fr=$("facts").children; const span=L("rust").dur;
+    // fact cues roughly follow the words: open source / Rust / browser / (local after)
+    const cues=[0.05,0.33,0.62,0.85];
+    [...fr].forEach((f,i)=>{const q=(t-L("rust").start-cues[i]*span)/0.3; f.style.opacity=clamp(q*1.5); f.style.transform=`translateY(${lerp(50,0,ease(q))}px)`;
+      f.style.borderColor=q>0&&q<2.2?"#6f9cff":"rgb(255 255 255/.12)";});
+    color="#6f9cff";}}
+  // HONEST
+  {const a=L("honest").start-0.12,b=endOf("honest");
+   if(t>a-0.3&&t<b+0.3){show("s-honest",inout(t,a,b),lerp(40,0,ease((t-a)/.4))); color="#f2a516";}}
+  // CTA
+  {const a=L("cta").start-0.12,b=endOf("cta");
+   if(t>a-0.3&&t<b+0.3){show("s-cta",inout(t,a,b),lerp(40,0,ease((t-a)/.4)));
+    $("cta-arrow").style.transform=`translateX(-50%) translateY(${Math.sin((t-a)*6)*18}px)`; color="#12a58a";}}
+  // LOOP
+  {const a=L("loop").start-0.12;
+   if(t>a-0.3){show("s-loop",clamp((t-a)/0.25),0,lerp(1.08,1,ease((t-a)/0.5))); color="#2f7bf5";}}
+
+  $("glow").style.setProperty("--c",color);
+  document.documentElement.style.setProperty("--c",color);
+  $("glow").style.transform=`translate(${Math.sin(t*0.6)*80}px,${Math.cos(t*0.45)*120}px)`;
+  captions(t);
+};
+</script></body></html>

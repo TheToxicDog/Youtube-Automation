@@ -1,0 +1,52 @@
+1
+00:00:00,250 --> 00:00:06,623
+Why do you still install Photoshop, when seven open-source apps run in one browser tab, and your files never leave your machine?
+
+2
+00:00:06,923 --> 00:00:10,405
+This is boety studio. Seven creative apps, one tab.
+
+3
+00:00:10,705 --> 00:00:12,365
+PhotoCraft, for images.
+
+4
+00:00:12,485 --> 00:00:14,052
+VectorCraft, for vector art.
+
+5
+00:00:14,172 --> 00:00:15,530
+FilmCraft, for video.
+
+6
+00:00:15,650 --> 00:00:17,368
+LightCraft, for raw photos.
+
+7
+00:00:17,488 --> 00:00:18,928
+PdfCraft, for PDF files.
+
+8
+00:00:19,048 --> 00:00:21,231
+EffectCraft, for motion graphics.
+
+9
+00:00:21,351 --> 00:00:23,476
+And DesignCraft, for page layout.
+
+10
+00:00:23,596 --> 00:00:28,066
+Every one is open source, written from scratch in Rust, and running right here in the browser.
+
+11
+00:00:28,366 --> 00:00:32,046
+They're early builds from the ArtCraft team, so expect rough edges.
+
+12
+00:00:32,346 --> 00:00:35,978
+Link's in the description. Seven apps. Zero installs.
+
+13
+00:00:36,278 --> 00:00:38,089
+So why are you still installing them?
+
